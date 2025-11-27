@@ -1,0 +1,56 @@
+[user]
+	name = David Krentzlin
+	email = david.krentzlin@new-work.se
+	signingkey = /Users/david.krentzlin/.ssh/id_rsa.pub
+
+[alias]
+    ci = commit
+    st = status
+    co = checkout
+    br = branch
+
+[push]
+    default = current
+    autoSetupRemote = true
+
+[core]
+  pager = delta
+  editor = vim -u NONE
+  excludesfile = ~/.gitignore
+
+[interactive]
+  diffFilter = delta --color-only
+
+[filter "lfs"]
+  clean = git-lfs clean %f
+  smudge = git-lfs smudge %f
+  required = true
+
+[delta]
+  navigate = true
+  light = false
+
+[diff]
+  colorMoved = default
+
+[http]
+  postBuffer = 157286400
+
+[credential "https://source.xing.com"]
+  username = david.krentzlin
+[credential]
+	helper = osxkeychain
+[github "source.xing.com"]
+	user = david-krentzlin
+[github "api.source.xing.com"]
+	user = david-krentzlin
+[github]
+	user = david-krentzlin
+[safe]
+	directory = app
+[commit]
+	gpgsign = true
+[gpg]
+	format = ssh
+[init]
+	defaultBranch = main

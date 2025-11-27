@@ -1,75 +1,46 @@
-# Starship prompt configuration
-# https://starship.rs/config/
-
-format = """
-$username\
-$hostname\
-$directory\
-$git_branch\
-$git_status\
-$python\
-$nodejs\
-$golang\
-$rust\
-$docker_context\
-$kubernetes\
-$aws\
-$gcloud\
-$azure\
-$line_break\
-$character"""
+add_newline = false
+scan_timeout = 10
 
 [character]
-success_symbol = "[❯](bold green)"
-error_symbol = "[❯](bold red)"
+success_symbol = "[λ](bold green)"
+error_symbol = "[λ](bold red)"
+vicmd_symbol = "[λ](bold yellow)"
 
+# Directory shown briefly
 [directory]
-style = "blue bold"
-truncation_length = 4
-truncate_to_repo = false
+truncation_length = 30
+truncate_to_repo  = true
+style = "bold"
 
 [git_branch]
-symbol = " "
-format = "[$symbol$branch]($style) "
-style = "bright-black"
+symbol = " "
+truncation_length = 20
 
 [git_status]
-format = '([\[$all_status$ahead_behind\]]($style) )'
-style = "cyan"
+disabled = true
 
-[username]
-style_user = "green bold"
-style_root = "red bold"
-format = "[$user]($style) "
-disabled = false
-show_always = false
+# Disable expensive modules
+[git_metrics]
+disabled = true
 
 [hostname]
-ssh_only = true
-format = "on [$hostname](bold red) "
-disabled = false
+disabled = true
 
-[python]
-symbol = " "
-format = "[$symbol$pyenv_prefix$version$virtualenv]($style) "
+[cmd_duration]
+disabled = true
 
 [nodejs]
-symbol = " "
-format = "[$symbol$version]($style) "
-
-[golang]
-symbol = " "
-format = "[$symbol$version]($style) "
-
+disabled = true
 [rust]
-symbol = " "
-format = "[$symbol$version]($style) "
+disabled = true
+[python]
+disabled = true
+[golang]
+disabled = true
+[ruby]
+disabled = true
+[java]
+disabled = true
 
-[docker_context]
-symbol = " "
-format = "[$symbol$context]($style) "
-
-[kubernetes]
-symbol = "☸ "
-format = '[$symbol$context( \($namespace\))]($style) '
-disabled = false
+[time]
+disabled = true

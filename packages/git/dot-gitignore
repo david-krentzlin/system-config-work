@@ -1,0 +1,12 @@
+node_modules
+.project.el
+.yarn
+/src/.sbt-hydra-history
+.project
+.elixir_ls
+.ruby_ls
+straight
+/src/.dir-locals.el
+/eln-cache/
+flycheck_.*
+*#
