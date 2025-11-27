@@ -24,4 +24,4 @@ eval "$(zoxide init zsh)"
 eval "$(atuin init zsh)"
 
 # mise
-eval "$(~/.local/bin/mise activate zsh)"
+eval "$(mise activate zsh)"
