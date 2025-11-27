@@ -1,0 +1,26 @@
+
+export ZSH_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
+
+# only in interactive mode
+
+if [[ $- != *i* ]]; then
+    return
+fi
+
+export ZSH_STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/zsh"
+export ZSH_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
+export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+
+if [[ ! -d "$ZSH_STATE_DIR" ]]; then
+    mkdir -p "$ZSH_STATE_DIR"
+fi
+
+if [[ ! -d "$ZSH_CACHE_DIR" ]]; then
+    mkdir -p "$ZSH_CACHE_DIR"
+fi
+
+if [[ -d "$ZSH_CONFIG_DIR/rc.d" ]]; then
+   for file in $(find $ZSH_CONFIG_DIR/rc.d -type f -or -type l | sort); do
+      source $file
+   done
+fi

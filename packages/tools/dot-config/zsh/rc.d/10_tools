@@ -1,0 +1,27 @@
+
+# bat
+alias cat=bat
+alias less=bat
+
+# eza
+alias l="eza --all --long"
+alias ll="eza"
+alias lr="eza --long --reverse --sort modified"
+alias lt="eza --long --tree --level=3"
+
+# find
+alias ff='fd --glob'
+alias f=rg
+
+
+# starship
+eval "$(starship init zsh)"
+
+# zoxide
+eval "$(zoxide init zsh)"
+
+# atuin
+eval "$(atuin init zsh)"
+
+# mise
+eval "$(~/.local/bin/mise activate zsh)"

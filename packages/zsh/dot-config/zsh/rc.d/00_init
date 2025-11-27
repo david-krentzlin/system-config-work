@@ -1,0 +1,53 @@
+# Set up basic shell options
+setopt AUTO_CD              # Auto cd when typing directory name
+setopt GLOB_DOTS            # Include hidden files in glob patterns
+setopt HIST_IGNORE_DUPS     # Don't record duplicate entries
+setopt HIST_IGNORE_SPACE    # Don't record commands that start with space
+setopt HIST_VERIFY          # Show command with history expansion to user before running
+setopt INC_APPEND_HISTORY   # Add commands to history as they are typed
+setopt INTERACTIVE_COMMENTS # Allow comments in interactive shell
+setopt SHARE_HISTORY        # Share history between sessions
+
+# History settings
+HISTFILE="${ZSH_STATE_DIR}/.history"
+HISTSIZE=10000
+SAVEHIST=10000
+
+# Auto complete with CTRL-Y
+bindkey -e
+bindkey '^y' autosuggest-accept
+bindkey '\e[3~' delete-char
+bindkey '^r' history-incremental-search-backward
+bindkey '^s' history-incremental-search-forward
+bindkey ' '  magic-space
+
+
+# Set up completion system
+autoload -Uz compinit && compinit
+setopt auto_menu
+setopt complete_in_word
+
+# Set up colors
+autoload -Uz colors
+colors
+
+# Basic prompt if starship isn't available
+if ! command -v starship >/dev/null 2>&1; then
+    PS1="%F{blue}%n@%m%f:%F{green}%~%f%# "
+fi
+
+
+eval $(/opt/homebrew/bin/brew shellenv)
+[ -r /opt/homebrew/opt/zsh-fast-syntx-highlighting ] && source /opt/homebrew/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+[ -r /opt/homebrew/opt/zsh-autosuggestions ] && source /opt/homebrew/opt/zsh-autosuggestions/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# Env
+export COLORTERM=truecolor
+export EDITOR="nvim --clean"
+export VISUAL="nvim --clean"
+export GIT_EDITOR="$VISUAL"
+export LC_ALL=en_US.UTF-8
+export CLICOLOR=1
+
+# PATH
+PATH=~/.local/bin:~/bin:${PATH}
