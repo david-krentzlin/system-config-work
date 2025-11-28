@@ -28,27 +28,22 @@ vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>q", ":q<CR>", { silent = true })
 
 -- Plugin specification (only kanagawa here)
-require("lazy").setup({
-  -- colorscheme
+require("lazy").setup(
   {
-    "rebelot/kanagawa.nvim",
-    config = function()
-      -- example minimal setup enabling the "dragon" theme
-      require("kanagawa").setup({
-        -- keep most defaults; explicitly set theme to "dragon"
-        theme = "dragon",
-        -- optional common tweaks (feel free to remove)
-        undercurl = true,
-        commentStyle = { italic = true },
-        keywordStyle = { italic = true },
-        statementStyle = { bold = true },
-        transparent = false,
-      })
-      -- load the colorscheme
-      vim.cmd("colorscheme kanagawa")
-    end,
-  },
-}, {
+   'shaunsingh/nord.nvim',
+   config = function()
+	vim.g.nord_contrast = true
+	vim.g.nord_borders = false
+	vim.g.nord_disable_background = false
+	vim.g.nord_italic = false
+	vim.g.nord_uniform_diff_background = true
+	vim.g.nord_bold = false
+
+	require('nord').set()
+   end
+  }
+  ,
+ {
   checker = { enabled = true }, -- optional: auto-check for plugin updates
 })
 
