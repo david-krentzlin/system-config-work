@@ -29,18 +29,14 @@ vim.keymap.set("n", "<leader>q", ":q<CR>", { silent = true })
 
 -- Plugin specification (only kanagawa here)
 require("lazy").setup(
-  {
-   'shaunsingh/nord.nvim',
-   config = function()
-	vim.g.nord_contrast = true
-	vim.g.nord_borders = false
-	vim.g.nord_disable_background = false
-	vim.g.nord_italic = false
-	vim.g.nord_uniform_diff_background = true
-	vim.g.nord_bold = false
-
-	require('nord').set()
-   end
+ { 
+	"catppuccin/nvim", 
+	name = "catppuccin", 
+	priority = 1000, 
+	opts = { flavour = "mocha", color_overrides= { mocha = { base = "#000000"  } } },
+	init = function()
+		vim.cmd.colorscheme "catppuccin-mocha"
+	end
   }
   ,
  {

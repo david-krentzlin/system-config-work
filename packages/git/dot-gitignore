@@ -10,3 +10,4 @@ straight
 /eln-cache/
 flycheck_.*
 *#
+.env
