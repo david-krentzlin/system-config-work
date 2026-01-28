@@ -50,4 +50,4 @@ export LC_ALL=en_US.UTF-8
 export CLICOLOR=1
 
 # PATH
-PATH=~/.local/bin:~/bin:${PATH}
+PATH=~/.local/bin:~/.cargo/bin:~/bin:${PATH}

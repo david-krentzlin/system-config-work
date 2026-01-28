@@ -61,12 +61,11 @@ I want you to add the required configuration to configure the most important com
 * Helix spellcheck wired via ltex-ls for Markdown and AsciiDoc.
 * Gitu configured with Modus-inspired colors and usability defaults.
 * Tooling installs wired via per-package Makefiles, with mise global defaults.
+* WezTerm project picker launches zoxide + fzf and spawns a workspace.
 
 ## Partially done / needs refinement
-* Helix language tooling incomplete for CSS, CSV, HOCON, ERB, Mermaid.
+* Helix language tooling lacks formatter/LSP choices for CSV, HOCON, ERB, Mermaid.
 * Helix toolchain setup via mise needs verification (scalafmt via coursier, gopls via go install, rust-analyzer via rustup).
-* Project selection workflow (zoxide/fzf -> workspace/session) not yet implemented.
 
 ## Not done
-* Add Helix language definitions/servers/formatters for CSS, CSV, HOCON, ERB, Mermaid.
-* Implement project selection binding/launcher in WezTerm (zoxide/fzf + workspace/session).
+* Choose formatters/LSPs for CSV, HOCON, ERB, Mermaid and wire installs.

@@ -19,6 +19,44 @@ name = "html"
 formatter = { command = "tidy" }
 
 [[language]]
+name = "css"
+language-servers = ["vscode-css-language-server"]
+
+[[language]]
+name = "csv"
+file-types = ["csv"]
+scope = "source.csv"
+
+[[language]]
+name = "erb"
+scope = "text.html.erb"
+injection-regex = "erb"
+file-types = ["erb"]
+block-comment-tokens = { start = "<!--", end = "-->" }
+indent = { tab-width = 2, unit = "  " }
+grammar = "embedded-template"
+
+[[language]]
+name = "hocon"
+scope = "source.conf"
+file-types = [
+  { glob = "**/src/*/resources/**/*.conf" },
+  { glob = "*scalafmt*.conf" },
+  { glob = "*scalafix*.conf" },
+]
+comment-token = "#"
+indent = { tab-width = 2, unit = "  " }
+auto-format = false
+
+[[language]]
+name = "mermaid"
+scope = "source.mermaid"
+injection-regex = "mermaid"
+file-types = ["mermaid", "mmd"]
+comment-token = "%%"
+indent = { tab-width = 4, unit = "    " }
+
+[[language]]
 name = "json"
 formatter = { command = "sh", args = ["-c", "dprint fmt --stdin %{buffer_name} --config $HOME/.config/helix/dprint.json"] }
 

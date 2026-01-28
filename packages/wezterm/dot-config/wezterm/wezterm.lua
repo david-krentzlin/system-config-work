@@ -18,9 +18,88 @@ config.window_padding = {
   bottom = 4,
 }
 
+local function trim_whitespace(value)
+  return (value:gsub("^%s+", ""):gsub("%s+$", ""))
+end
+
+local function project_workspace_picker(window, pane)
+  local success, stdout, stderr = wezterm.run_child_process {
+    "sh",
+    "-lc",
+    "zoxide query -l | fzf --prompt 'Project> '",
+  }
+
+  if not success then
+    wezterm.log_error("Project picker failed: " .. (stderr or ""))
+    return
+  end
+
+  local project_dir = trim_whitespace(stdout or "")
+  if project_dir == "" then
+    return
+  end
+
+  local workspace_name = project_dir:match("([^/]+)$") or project_dir
+
+  window:perform_action(
+    act.SwitchToWorkspace {
+      name = workspace_name,
+      spawn = { cwd = project_dir },
+    },
+    pane
+  )
+end
+
+local function prompt_new_workspace(window, pane)
+  window:perform_action(
+    act.PromptInputLine {
+      description = "New workspace name",
+      action = wezterm.action_callback(function(prompt_window, prompt_pane, line)
+        if not line or line == "" then
+          return
+        end
+
+        prompt_window:perform_action(
+          act.SwitchToWorkspace { name = line },
+          prompt_pane
+        )
+      end),
+    },
+    pane
+  )
+end
+
+local function prompt_rename_workspace(window, pane)
+  local current_workspace = wezterm.mux.get_active_workspace()
+  if not current_workspace or current_workspace == "" then
+    return
+  end
+
+  window:perform_action(
+    act.PromptInputLine {
+      description = "Rename workspace",
+      action = wezterm.action_callback(function(prompt_window, prompt_pane, line)
+        if not line or line == "" or line == current_workspace then
+          return
+        end
+
+        wezterm.mux.rename_workspace(current_workspace, line)
+        prompt_window:perform_action(
+          act.SwitchToWorkspace { name = line },
+          prompt_pane
+        )
+      end),
+    },
+    pane
+  )
+end
+
 config.keys = {
   { key = "t", mods = "LEADER", action = act.SendKey { key = "t", mods = "CTRL" } },
   { key = "s", mods = "LEADER", action = act.ShowLauncher },
+  { key = "p", mods = "LEADER", action = wezterm.action_callback(project_workspace_picker) },
+  { key = "n", mods = "LEADER", action = wezterm.action_callback(prompt_new_workspace) },
+  { key = "r", mods = "LEADER", action = wezterm.action_callback(prompt_rename_workspace) },
   { key = "c", mods = "LEADER", action = act.SpawnTab "CurrentPaneDomain" },
   { key = "x", mods = "LEADER", action = act.CloseCurrentPane { confirm = true } },
   { key = "z", mods = "LEADER", action = act.TogglePaneZoomState },
