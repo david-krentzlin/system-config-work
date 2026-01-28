@@ -25,9 +25,9 @@ end
 
 local function project_workspace_picker(window, pane)
   local success, stdout, stderr = wezterm.run_child_process {
-    "zoxide",
-    "query",
-    "-l",
+    "zsh",
+    "-lic",
+    "zoxide query -l",
   }
 
   if not success then
@@ -43,7 +43,6 @@ local function project_workspace_picker(window, pane)
       table.insert(choices, {
         id = project_dir,
         label = workspace_name,
-        description = project_dir,
       })
     end
   end
@@ -57,12 +56,13 @@ local function project_workspace_picker(window, pane)
     act.InputSelector {
       title = "Project",
       choices = choices,
-      action = wezterm.action_callback(function(prompt_window, prompt_pane, choice)
-        if not choice then
+      fuzzy = true,
+      action = wezterm.action_callback(function(prompt_window, prompt_pane, id, label)
+        if not id and not label then
           return
         end
 
-        local project_dir = trim_whitespace(choice)
+        local project_dir = trim_whitespace(id or label or "")
         if project_dir == "" then
           return
         end
@@ -125,11 +125,58 @@ local function prompt_rename_workspace(window, pane)
   )
 end
 
+local function workspace_switcher(window, pane)
+  local current_workspace = wezterm.mux.get_active_workspace()
+  local workspaces = wezterm.mux.get_workspace_names()
+  local choices = {}
+
+  for _, workspace_name in ipairs(workspaces or {}) do
+    local label = workspace_name
+    if workspace_name == current_workspace then
+      label = "* " .. workspace_name
+    end
+
+    table.insert(choices, {
+      id = workspace_name,
+      label = label,
+    })
+  end
+
+  if #choices == 0 then
+    return
+  end
+
+  window:perform_action(
+    act.InputSelector {
+      title = "Workspace",
+      choices = choices,
+      fuzzy = true,
+      action = wezterm.action_callback(function(prompt_window, prompt_pane, id, label)
+        if not id and not label then
+          return
+        end
+
+        local target_workspace = trim_whitespace(id or label or "")
+        if target_workspace == "" then
+          return
+        end
+
+        prompt_window:perform_action(
+          act.SwitchToWorkspace { name = target_workspace },
+          prompt_pane
+        )
+      end),
+    },
+    pane
+  )
+end
+
 config.keys = {
-  { key = "t", mods = "LEADER", action = act.SendKey { key = "t", mods = "CTRL" } },
-  { key = "s", mods = "LEADER", action = act.ShowLauncher },
-  { key = "p", mods = "LEADER", action = wezterm.action_callback(project_workspace_picker) },
-  { key = "n", mods = "LEADER", action = wezterm.action_callback(prompt_new_workspace) },
+	{ key = "t", mods = "LEADER", action = act.SendKey { key = "t", mods = "CTRL" } },
+	{ key = "s", mods = "LEADER", action = act.ShowLauncher },
+	{ key = "p", mods = "LEADER", action = wezterm.action_callback(project_workspace_picker) },
+	{ key = "w", mods = "LEADER", action = wezterm.action_callback(workspace_switcher) },
+	{ key = "n", mods = "LEADER", action = wezterm.action_callback(prompt_new_workspace) },
   { key = "r", mods = "LEADER", action = wezterm.action_callback(prompt_rename_workspace) },
   { key = "c", mods = "LEADER", action = act.SpawnTab "CurrentPaneDomain" },
   { key = "[", mods = "LEADER", action = act.ActivateTabRelative(-1) },
