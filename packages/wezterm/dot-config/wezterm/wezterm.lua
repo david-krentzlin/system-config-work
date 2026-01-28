@@ -5,12 +5,13 @@ local config = wezterm.config_builder()
 
 config.color_scheme = "Modus-Vivendi"
 config.font = wezterm.font_with_fallback({
-  "Terminess Nerd Font",
-  "Terminess (TTF) Nerd Font",
+	{ family = "Terminess Nerd Font", weight = "Regular" },
+	{ family = "Terminess (TTF) Nerd Font", weight = "Regular" },
 })
+config.font_size = 14
 config.hide_tab_bar_if_only_one_tab = true
 config.use_fancy_tab_bar = false
-config.leader = { key = "t", mods = "CTRL", timeout_milliseconds = 1000 }
+config.leader = { key = ",", mods = "SUPER", timeout_milliseconds = 1000 }
 config.window_padding = {
   left = 6,
   right = 6,
@@ -24,9 +25,9 @@ end
 
 local function project_workspace_picker(window, pane)
   local success, stdout, stderr = wezterm.run_child_process {
-    "sh",
-    "-lc",
-    "zoxide query -l | fzf --prompt 'Project> '",
+    "zoxide",
+    "query",
+    "-l",
   }
 
   if not success then
@@ -34,17 +35,47 @@ local function project_workspace_picker(window, pane)
     return
   end
 
-  local project_dir = trim_whitespace(stdout or "")
-  if project_dir == "" then
+  local choices = {}
+  for line in (stdout or ""):gmatch("[^\r\n]+") do
+    local project_dir = trim_whitespace(line)
+    if project_dir ~= "" then
+      local workspace_name = project_dir:match("([^/]+)$") or project_dir
+      table.insert(choices, {
+        id = project_dir,
+        label = workspace_name,
+        description = project_dir,
+      })
+    end
+  end
+
+  if #choices == 0 then
+    wezterm.log_info("Project picker: no entries from zoxide")
     return
   end
 
-  local workspace_name = project_dir:match("([^/]+)$") or project_dir
-
   window:perform_action(
-    act.SwitchToWorkspace {
-      name = workspace_name,
-      spawn = { cwd = project_dir },
+    act.InputSelector {
+      title = "Project",
+      choices = choices,
+      action = wezterm.action_callback(function(prompt_window, prompt_pane, choice)
+        if not choice then
+          return
+        end
+
+        local project_dir = trim_whitespace(choice)
+        if project_dir == "" then
+          return
+        end
+
+        local workspace_name = project_dir:match("([^/]+)$") or project_dir
+        prompt_window:perform_action(
+          act.SwitchToWorkspace {
+            name = workspace_name,
+            spawn = { cwd = project_dir },
+          },
+          prompt_pane
+        )
+      end),
     },
     pane
   )
@@ -101,7 +132,18 @@ config.keys = {
   { key = "n", mods = "LEADER", action = wezterm.action_callback(prompt_new_workspace) },
   { key = "r", mods = "LEADER", action = wezterm.action_callback(prompt_rename_workspace) },
   { key = "c", mods = "LEADER", action = act.SpawnTab "CurrentPaneDomain" },
-  { key = "x", mods = "LEADER", action = act.CloseCurrentPane { confirm = true } },
+  { key = "[", mods = "LEADER", action = act.ActivateTabRelative(-1) },
+  { key = "]", mods = "LEADER", action = act.ActivateTabRelative(1) },
+  { key = "1", mods = "LEADER", action = act.ActivateTab(0) },
+  { key = "2", mods = "LEADER", action = act.ActivateTab(1) },
+  { key = "3", mods = "LEADER", action = act.ActivateTab(2) },
+  { key = "4", mods = "LEADER", action = act.ActivateTab(3) },
+  { key = "5", mods = "LEADER", action = act.ActivateTab(4) },
+  { key = "6", mods = "LEADER", action = act.ActivateTab(5) },
+  { key = "7", mods = "LEADER", action = act.ActivateTab(6) },
+  { key = "8", mods = "LEADER", action = act.ActivateTab(7) },
+  { key = "9", mods = "LEADER", action = act.ActivateTab(8) },
+	{ key = "x", mods = "LEADER", action = act.CloseCurrentPane { confirm = false } },
   { key = "z", mods = "LEADER", action = act.TogglePaneZoomState },
   { key = "h", mods = "LEADER", action = act.ActivatePaneDirection "Left" },
   { key = "j", mods = "LEADER", action = act.ActivatePaneDirection "Down" },
@@ -113,22 +155,21 @@ config.keys = {
   { key = "L", mods = "LEADER|SHIFT", action = act.AdjustPaneSize { "Right", 5 } },
   { key = "|", mods = "LEADER|SHIFT", action = act.SplitHorizontal { domain = "CurrentPaneDomain" } },
   { key = "-", mods = "LEADER", action = act.SplitVertical { domain = "CurrentPaneDomain" } },
-  {
-    key = "g",
-    mods = "LEADER",
-    action = act.SplitPane {
-      direction = "Right",
-      size = { Percent = 40 },
-      command = {
-        args = {
-          "sh",
-          "-lc",
-          "root=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$root\" && exec gitu",
-        },
-      },
-      domain = "CurrentPaneDomain",
-    },
-  },
+	{
+		key = "g",
+		mods = "LEADER",
+		action = act.SplitPane {
+			direction = "Right",
+			size = { Percent = 40 },
+			command = {
+				args = {
+					"zsh",
+					"-lic",
+					"root=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$root\"; if command -v lazygit >/dev/null 2>&1; then exec lazygit; else echo 'lazygit not found on PATH'; exec zsh -l; fi",
+				},
+			},
+		},
+	},
 }
 
 return config

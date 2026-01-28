@@ -1,5 +1,6 @@
 [tools]
 java = "21"
+lazygit = "latest"
 
 [settings]
 experimental = true
