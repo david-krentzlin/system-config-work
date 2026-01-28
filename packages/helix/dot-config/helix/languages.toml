@@ -1,86 +1,49 @@
+
+[language-server.dprint]
+command = "dprint"
+args = ["lsp"]
+
+# Extra language server you’re adding (used for Markdown diagnostics + code actions)
 [language-server.ltex-ls]
 command = "ltex-ls"
 
+[language-server.taplo.config]
+config = {}
+
+# Ruby: use Rufo + format-on-save
 [[language]]
 name = "ruby"
-language-servers = ["ruby-lsp", "solargraph"]
+formatter = { command = "rufo", args = ["--simple-exit"] }
+auto-format = true
 
-[[language]]
-name = "go"
-language-servers = ["gopls"]
-formatter = { command = "gofmt" }
-
-[[language]]
-name = "rust"
-formatter = { command = "rustfmt" }
-
-[[language]]
-name = "html"
-formatter = { command = "tidy" }
-
-[[language]]
-name = "css"
-language-servers = ["vscode-css-language-server"]
-
-[[language]]
-name = "csv"
-file-types = ["csv"]
-scope = "source.csv"
-
-[[language]]
-name = "erb"
-scope = "text.html.erb"
-injection-regex = "erb"
-file-types = ["erb"]
-block-comment-tokens = { start = "<!--", end = "-->" }
-indent = { tab-width = 2, unit = "  " }
-grammar = "embedded-template"
-
-[[language]]
-name = "hocon"
-scope = "source.conf"
-file-types = [
-  { glob = "**/src/*/resources/**/*.conf" },
-  { glob = "*scalafmt*.conf" },
-  { glob = "*scalafix*.conf" },
-]
-comment-token = "#"
-indent = { tab-width = 2, unit = "  " }
-auto-format = false
-
-[[language]]
-name = "mermaid"
-scope = "source.mermaid"
-injection-regex = "mermaid"
-file-types = ["mermaid", "mmd"]
-comment-token = "%%"
-indent = { tab-width = 4, unit = "    " }
-
+# JSON/TOML/Markdown: force dprint as formatter
 [[language]]
 name = "json"
-formatter = { command = "sh", args = ["-c", "dprint fmt --stdin %{buffer_name} --config $HOME/.config/helix/dprint.json"] }
+language-servers = ["dprint"]
+auto-format = true
 
 [[language]]
 name = "toml"
-formatter = { command = "sh", args = ["-c", "dprint fmt --stdin %{buffer_name} --config $HOME/.config/helix/dprint.json"] }
+language-servers = ["taplo"]
+auto-format = true
 
 [[language]]
 name = "markdown"
-formatter = { command = "sh", args = ["-c", "dprint fmt --stdin %{buffer_name} --config $HOME/.config/helix/dprint.json"] }
+formatter = { command = "sh", args = [
+  "-c",
+  "dprint fmt --stdin %{buffer_name} --config $HOME/.config/helix/dprint.json",
+] }
 language-servers = [
+  # keep marksman, but disable its formatting so dprint is the formatter
   { name = "marksman", except-features = ["format"] },
-  { name = "ltex-ls", only-features = ["diagnostics", "code-action"] }
+  # add ltex-ls only for diagnostics + code actions
+  { name = "ltex-ls", only-features = ["diagnostics", "code-action"] },
+  { name = "dprint", only-features = ["format"] },
 ]
+auto-format = true
 
+# YAML: yq formatter (optional, but you had it for a reason)
 [[language]]
 name = "yaml"
 formatter = { command = "yq", args = ["-P", "."] }
-language-servers = ["yaml-language-server"]
-
-[[language]]
-name = "asciidoc"
-scope = "text.asciidoc"
-file-types = ["adoc", "asciidoc"]
-language-servers = [
-  { name = "ltex-ls", only-features = ["diagnostics", "code-action"] }
-]
+auto-format = true

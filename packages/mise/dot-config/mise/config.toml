@@ -1,6 +1,8 @@
 [tools]
 java = "21"
 lazygit = "latest"
+taplo = "latest"
+yazi = "latest"
 
 [settings]
 experimental = true

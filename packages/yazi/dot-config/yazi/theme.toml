@@ -1,0 +1,8 @@
+
+# theme.toml — base Modus-Vivendi flavor + dev-friendly overrides
+
+[flavor]
+# name must match the folder under ~/.config/yazi/flavors/
+dark  = "modus-vivendi"
+light = "modus-vivendi"  # use same flavor for both (flavor can include both)
+

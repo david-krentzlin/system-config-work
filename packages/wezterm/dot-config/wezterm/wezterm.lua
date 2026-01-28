@@ -217,6 +217,22 @@ config.keys = {
 			},
 		},
 	},
+
+	{
+		key = "a",
+		mods = "LEADER",
+		action = act.SplitPane {
+			direction = "Right",
+			size = { Percent = 50 },
+			command = {
+				args = {
+					"zsh",
+					"-lic",
+					"root=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$root\"; if command -v opencode >/dev/null 2>&1; then exec opencode; else echo 'opencode not found on PATH'; exec zsh -l; fi",
+				},
+			},
+		},
+	},
 }
 
 return config
