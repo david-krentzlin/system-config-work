@@ -1,0 +1,5 @@
+theme = "modus_vivendi_custom"
+
+[editor]
+clipboard-provider = "pasteboard"
+default-yank-register = "+"

@@ -1,0 +1,12 @@
+inherits = "modus_vivendi"
+
+"ui.gutter" = { bg = "#000000" }
+"ui.gutter.selected" = { bg = "#000000" }
+"ui.linenr" = { bg = "#000000" }
+"ui.linenr.selected" = { bg = "#000000" }
+"ui.statusline" = { bg = "#101010" }
+"ui.statusline.inactive" = { bg = "#0a0a0a" }
+"ui.popup" = { bg = "#0a0a0a" }
+"ui.popup.info" = { bg = "#0a0a0a" }
+"ui.menu" = { bg = "#0a0a0a" }
+"ui.menu.selected" = { bg = "#151515" }

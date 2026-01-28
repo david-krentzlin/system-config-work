@@ -1,0 +1,48 @@
+[language-server.ltex-ls]
+command = "ltex-ls"
+
+[[language]]
+name = "ruby"
+language-servers = ["ruby-lsp", "solargraph"]
+
+[[language]]
+name = "go"
+language-servers = ["gopls"]
+formatter = { command = "gofmt" }
+
+[[language]]
+name = "rust"
+formatter = { command = "rustfmt" }
+
+[[language]]
+name = "html"
+formatter = { command = "tidy" }
+
+[[language]]
+name = "json"
+formatter = { command = "sh", args = ["-c", "dprint fmt --stdin %{buffer_name} --config $HOME/.config/helix/dprint.json"] }
+
+[[language]]
+name = "toml"
+formatter = { command = "sh", args = ["-c", "dprint fmt --stdin %{buffer_name} --config $HOME/.config/helix/dprint.json"] }
+
+[[language]]
+name = "markdown"
+formatter = { command = "sh", args = ["-c", "dprint fmt --stdin %{buffer_name} --config $HOME/.config/helix/dprint.json"] }
+language-servers = [
+  { name = "marksman", except-features = ["format"] },
+  { name = "ltex-ls", only-features = ["diagnostics", "code-action"] }
+]
+
+[[language]]
+name = "yaml"
+formatter = { command = "yq", args = ["-P", "."] }
+language-servers = ["yaml-language-server"]
+
+[[language]]
+name = "asciidoc"
+scope = "text.asciidoc"
+file-types = ["adoc", "asciidoc"]
+language-servers = [
+  { name = "ltex-ls", only-features = ["diagnostics", "code-action"] }
+]
