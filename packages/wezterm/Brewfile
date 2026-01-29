@@ -1,2 +1,3 @@
 cask "wezterm"
 cask "font-terminess-ttf-nerd-font"
+cask "font-fira-code"

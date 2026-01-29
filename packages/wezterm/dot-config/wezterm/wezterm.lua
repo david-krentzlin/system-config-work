@@ -5,6 +5,7 @@ local config = wezterm.config_builder()
 
 config.color_scheme = "Modus-Vivendi"
 config.font = wezterm.font_with_fallback({
+	{ family = "Fira Code", weight = "Regular" },
 	{ family = "Terminess Nerd Font", weight = "Regular" },
 	{ family = "Terminess (TTF) Nerd Font", weight = "Regular" },
 })
@@ -214,7 +215,7 @@ wezterm.on("gui-startup", function(cmd)
     direction = "Right",
     size = 0.5,
     cwd = cwd,
-    args = { "taskwarrior-tui" },
+    args = command_or_shell( "taskwarrior-tui" ),
   }
 end)
 
@@ -225,6 +226,8 @@ config.keys = {
 	{ key = "w", mods = "LEADER", action = wezterm.action_callback(workspace_switcher) },
 	{ key = "n", mods = "LEADER", action = wezterm.action_callback(prompt_new_workspace) },
   { key = "r", mods = "LEADER", action = wezterm.action_callback(prompt_rename_workspace) },
+  { key = "+", mods = "SUPER", action = act.IncreaseFontSize },
+  { key = "-", mods = "SUPER", action = act.DecreaseFontSize },
   { key = "c", mods = "ALT", action = act.SpawnTab "CurrentPaneDomain" },
   { key = "[", mods = "ALT", action = act.ActivateTabRelative(-1) },
   { key = "]", mods = "ALT", action = act.ActivateTabRelative(1) },
