@@ -6,7 +6,12 @@ inherits = "modus_vivendi"
 "ui.linenr.selected" = { bg = "#000000" }
 "ui.statusline" = { bg = "#101010" }
 "ui.statusline.inactive" = { bg = "#0a0a0a" }
+"ui.statusline.normal" = { fg = "#2fafff", bg = "#101010" }
+"ui.statusline.insert" = { fg = "#44bc44", bg = "#101010" }
+"ui.statusline.select" = { fg = "#b6a0ff", bg = "#101010" }
 "ui.popup" = { bg = "#0a0a0a" }
-"ui.popup.info" = { bg = "#0a0a0a" }
+"ui.popup.info" = { bg = "#0a0a0a", fg = "#7a7a7a" }
 "ui.menu" = { bg = "#0a0a0a" }
 "ui.menu.selected" = { bg = "#151515" }
+"ui.selection" = { bg = "#202020" }
+"ui.selection.primary" = { bg = "#202020" }

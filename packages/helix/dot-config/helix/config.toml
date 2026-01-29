@@ -4,10 +4,20 @@ theme = "modus_vivendi_custom"
 clipboard-provider = "pasteboard"
 default-yank-register = "+"
 end-of-line-diagnostics = "warning"
+color-modes = true
+
+[editor.cursor-shape]
+insert = "underline"
 
 [editor.inline-diagnostics]
 cursor-line = "disable"
 other-lines = "disable"
 
 [editor.statusline]
-right = ["diagnostics", "position", "file-type"]
+left = ["mode", "spinner", "file-name", "read-only-indicator", "file-modification-indicator"]
+right = ["diagnostics", "workspace-diagnostics", "version-control", "position", "total-line-numbers", "file-type"]
+
+[editor.statusline.mode]
+normal = "🅝"
+insert = "🅘"
+select = "🅢"
