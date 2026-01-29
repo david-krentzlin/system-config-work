@@ -5,6 +5,7 @@ clipboard-provider = "pasteboard"
 default-yank-register = "+"
 end-of-line-diagnostics = "warning"
 color-modes = true
+trim-trailing-whitespace = true
 
 [editor.cursor-shape]
 insert = "underline"

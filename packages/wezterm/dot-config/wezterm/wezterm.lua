@@ -259,7 +259,7 @@ wezterm.on("gui-startup", function(cmd)
     direction = "Right",
     size = 0.5,
     cwd = cwd,
-    args = command_or_shell( "taskwarrior-tui" ),
+    args = command_or_shell( "tasksh" ),
   }
 end)
 

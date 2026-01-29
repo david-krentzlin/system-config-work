@@ -1,8 +1,7 @@
 install:
 	@echo "Installing $(shell basename $(PWD))..."
 	@command -v brew >/dev/null 2>&1 || (echo "Error: Homebrew not found. Install from https://brew.sh" && exit 1)
-	@brew install taskwarrior-tui
-	@brew install --cask taskwarrior-pomodoro
+	@brew install taskwarrior-tui tasksh
 
 clean:
 	@echo "Cleaning $(shell basename $(PWD))..."

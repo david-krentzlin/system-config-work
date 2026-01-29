@@ -3,7 +3,7 @@ inherits = "modus_vivendi"
 "ui.gutter" = { bg = "#000000" }
 "ui.gutter.selected" = { bg = "#000000" }
 "ui.linenr" = { bg = "#000000" }
-"ui.linenr.selected" = { bg = "#000000" }
+"ui.linenr.selected" = { fg = "#2fafff", bg = "#000000" }
 "ui.statusline" = { bg = "#101010" }
 "ui.statusline.inactive" = { bg = "#0a0a0a" }
 "ui.statusline.normal" = { fg = "#2fafff", bg = "#101010" }
@@ -15,3 +15,4 @@ inherits = "modus_vivendi"
 "ui.menu.selected" = { bg = "#151515" }
 "ui.selection" = { bg = "#202020" }
 "ui.selection.primary" = { bg = "#202020" }
+"ui.virtual.whitespace" = { fg = "#000000" }
