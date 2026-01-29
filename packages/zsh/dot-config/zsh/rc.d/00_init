@@ -43,8 +43,8 @@ eval $(/opt/homebrew/bin/brew shellenv)
 
 # Env
 export COLORTERM=truecolor
-export EDITOR="nvim --clean"
-export VISUAL="nvim --clean"
+export EDITOR="hx"
+export VISUAL="hx"
 export GIT_EDITOR="$VISUAL"
 export LC_ALL=en_US.UTF-8
 export CLICOLOR=1

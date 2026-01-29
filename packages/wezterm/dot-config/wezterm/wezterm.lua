@@ -102,7 +102,7 @@ local function project_workspace_picker(window, pane)
         prompt_window:perform_action(
           act.SwitchToWorkspace {
             name = workspace_name,
-            spawn = { cwd = project_dir },
+            spawn = { cwd = project_dir  },
           },
           prompt_pane
         )
@@ -202,6 +202,50 @@ local function workspace_switcher(window, pane)
   )
 end
 
+local function pmd_context_picker(window, pane)
+  local choices = {
+    { id = "projects", label = "projects" },
+    { id = "teams", label = "teams" },
+    { id = "people", label = "people" },
+    { id = "servicegroups", label = "servicegroups" },
+  }
+
+  window:perform_action(
+    act.InputSelector {
+      title = "PMD",
+      choices = choices,
+      fuzzy = false,
+      action = wezterm.action_callback(function(prompt_window, prompt_pane, id, label)
+        if not id and not label then
+          return
+        end
+
+        local selection = trim_whitespace(id or label or "")
+        if selection == "" then
+          return
+        end
+
+        local command = string.format(
+          "if command -v pmd >/dev/null 2>&1; then exec pmd %q; else echo 'pmd not found on PATH'; exec zsh -l; fi",
+          selection
+        )
+
+        prompt_window:perform_action(
+          act.SplitPane {
+            direction = "Right",
+            size = { Percent = 40 },
+            command = {
+              args = { "zsh", "-lic", command },
+            },
+          },
+          prompt_pane
+        )
+      end),
+    },
+    pane
+  )
+end
+
 wezterm.on("gui-startup", function(cmd)
   local cwd = cmd and cmd.cwd or nil
   local workspace_name = "organization"
@@ -226,6 +270,7 @@ config.keys = {
 	{ key = "w", mods = "LEADER", action = wezterm.action_callback(workspace_switcher) },
 	{ key = "n", mods = "LEADER", action = wezterm.action_callback(prompt_new_workspace) },
   { key = "r", mods = "LEADER", action = wezterm.action_callback(prompt_rename_workspace) },
+  { key = ",", mods = "LEADER", action = wezterm.action_callback(pmd_context_picker) },
   { key = "+", mods = "SUPER", action = act.IncreaseFontSize },
   { key = "-", mods = "SUPER", action = act.DecreaseFontSize },
   { key = "c", mods = "ALT", action = act.SpawnTab "CurrentPaneDomain" },
@@ -242,21 +287,6 @@ config.keys = {
   { key = "9", mods = "ALT", action = act.ActivateTab(8) },
 	{ key = "x", mods = "ALT", action = act.CloseCurrentPane { confirm = false } },
   { key = "z", mods = "ALT", action = act.TogglePaneZoomState },
-  {
-    key = "t",
-    mods = "ALT",
-    action = act.SplitPane {
-      direction = "Right",
-      size = { Percent = 40 },
-      command = {
-        args = {
-          "zsh",
-          "-lic",
-          "if command -v taskwarrior-tui >/dev/null 2>&1; then exec taskwarrior-tui; else echo 'taskwarrior-tui not found on PATH'; exec zsh -l; fi",
-        },
-      },
-    },
-  },
   { key = "h", mods = "ALT", action = act.ActivatePaneDirection "Left" },
   { key = "j", mods = "ALT", action = act.ActivatePaneDirection "Down" },
   { key = "k", mods = "ALT", action = act.ActivatePaneDirection "Up" },
@@ -265,14 +295,14 @@ config.keys = {
   { key = "J", mods = "ALT|SHIFT", action = act.AdjustPaneSize { "Down", 5 } },
   { key = "K", mods = "ALT|SHIFT", action = act.AdjustPaneSize { "Up", 5 } },
   { key = "L", mods = "ALT|SHIFT", action = act.AdjustPaneSize { "Right", 5 } },
-  { key = "|", mods = "LEADER|SHIFT", action = act.SplitHorizontal { domain = "CurrentPaneDomain" } },
-  { key = "-", mods = "LEADER", action = act.SplitVertical { domain = "CurrentPaneDomain" } },
+  { key = "v", mods = "LEADER", action = act.SplitHorizontal { domain = "CurrentPaneDomain" } },
+  { key = "h", mods = "LEADER", action = act.SplitVertical { domain = "CurrentPaneDomain" } },
 	{
 		key = "g",
 		mods = "LEADER",
 		action = act.SplitPane {
 			direction = "Right",
-			size = { Percent = 40 },
+			size = { Percent = 50 },
 			command = {
 				args = {
 					"zsh",
@@ -304,7 +334,7 @@ config.keys = {
 		mods = "LEADER",
 		action = act.SplitPane {
 			direction = "Right",
-			size = { Percent = 40 },
+			size = { Percent = 60 },
 			command = {
 				args = {
 					"zsh",
@@ -314,6 +344,22 @@ config.keys = {
 			},
 		},
 	},
+
+  {
+    key = "t",
+    mods = "ALT",
+    action = act.SplitPane {
+      direction = "Right",
+      size = { Percent = 40 },
+      command = {
+        args = {
+          "zsh",
+          "-lic",
+          "if command -v taskwarrior-tui >/dev/null 2>&1; then exec taskwarrior-tui; else echo 'taskwarrior-tui not found on PATH'; exec zsh -l; fi",
+        },
+      },
+    },
+  },
 }
 
 return config
