@@ -19,21 +19,8 @@ sort_reverse = false
 cwd = { fg = "#cbd5e0" }
 
 # quick preview sizing: prefer a compact preview pane that can be maximized
-preview_ratio = 40    # percent width for preview pane in a split layout
+preview_ratio = 40 # percent width for preview pane in a split layout
 
-# Use async previewers (default) — leave piper/mux/plugin usage to theme/plugins if desired
-
-# Auto-detect and use $EDITOR for "open/edit"
-[[opener.edit]]
-run = '$EDITOR %s1'
-for = "text/*"
-desc = "Edit with $EDITOR"
-
-# "Open with" example to open matching files in external app
-[[opener.open]]
-run = 'xdg-open "%s1"'
-for = "*"
-desc = "Open with system default"
 
 # Finder / search integration: point to built-in helper resources (resources repo has scripts)
 # You can later install yafg / fazif resource scripts (see Yazi resources page)

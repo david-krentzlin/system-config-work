@@ -11,7 +11,7 @@ config.font = wezterm.font_with_fallback({
 config.font_size = 14
 config.hide_tab_bar_if_only_one_tab = true
 config.use_fancy_tab_bar = false
-config.leader = { key = ",", mods = "SUPER", timeout_milliseconds = 1000 }
+config.leader = { key = ",", mods = "ALT", timeout_milliseconds = 1000 }
 config.window_padding = {
   left = 6,
   right = 6,
@@ -21,6 +21,36 @@ config.window_padding = {
 
 local function trim_whitespace(value)
   return (value:gsub("^%s+", ""):gsub("%s+$", ""))
+end
+
+local function command_or_shell(command, fallback_command, label)
+  local missing_label = label or command
+  local command_check = string.format(
+    "if command -v %s >/dev/null 2>&1; then exec %s",
+    command,
+    command
+  )
+
+  if fallback_command then
+    command_check = string.format(
+      "%s; elif command -v %s >/dev/null 2>&1; then exec %s",
+      command_check,
+      fallback_command,
+      fallback_command
+    )
+  end
+
+  local command_line = string.format(
+    "%s; else echo '%s not found on PATH'; exec zsh -l; fi",
+    command_check,
+    missing_label
+  )
+
+  return {
+    "zsh",
+    "-lic",
+    command_line,
+  }
 end
 
 local function project_workspace_picker(window, pane)
@@ -171,6 +201,23 @@ local function workspace_switcher(window, pane)
   )
 end
 
+wezterm.on("gui-startup", function(cmd)
+  local cwd = cmd and cmd.cwd or nil
+  local workspace_name = "organization"
+  local window, pane = wezterm.mux.spawn_window {
+    cwd = cwd,
+    workspace = workspace_name,
+    args = command_or_shell("hours"),
+  }
+
+  pane:split {
+    direction = "Right",
+    size = 0.5,
+    cwd = cwd,
+    args = { "taskwarrior-tui" },
+  }
+end)
+
 config.keys = {
 	{ key = "t", mods = "LEADER", action = act.SendKey { key = "t", mods = "CTRL" } },
 	{ key = "s", mods = "LEADER", action = act.ShowLauncher },
@@ -192,6 +239,21 @@ config.keys = {
   { key = "9", mods = "ALT", action = act.ActivateTab(8) },
 	{ key = "x", mods = "ALT", action = act.CloseCurrentPane { confirm = false } },
   { key = "z", mods = "ALT", action = act.TogglePaneZoomState },
+  {
+    key = "t",
+    mods = "ALT",
+    action = act.SplitPane {
+      direction = "Right",
+      size = { Percent = 40 },
+      command = {
+        args = {
+          "zsh",
+          "-lic",
+          "if command -v taskwarrior-tui >/dev/null 2>&1; then exec taskwarrior-tui; else echo 'taskwarrior-tui not found on PATH'; exec zsh -l; fi",
+        },
+      },
+    },
+  },
   { key = "h", mods = "ALT", action = act.ActivatePaneDirection "Left" },
   { key = "j", mods = "ALT", action = act.ActivatePaneDirection "Down" },
   { key = "k", mods = "ALT", action = act.ActivatePaneDirection "Up" },
@@ -229,6 +291,22 @@ config.keys = {
 					"zsh",
 					"-lic",
 					"root=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$root\"; if command -v opencode >/dev/null 2>&1; then exec opencode; else echo 'opencode not found on PATH'; exec zsh -l; fi",
+				},
+			},
+		},
+	},
+
+  {
+		key = "e",
+		mods = "LEADER",
+		action = act.SplitPane {
+			direction = "Right",
+			size = { Percent = 40 },
+			command = {
+				args = {
+					"zsh",
+					"-lic",
+					"root=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$root\"; if command -v yazi >/dev/null 2>&1; then exec yazi; else echo 'yazi not found on PATH'; exec zsh -l; fi",
 				},
 			},
 		},
