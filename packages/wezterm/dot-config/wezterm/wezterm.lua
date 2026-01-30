@@ -20,6 +20,8 @@ config.window_padding = {
   bottom = 4,
 }
 
+config.default_cursor_style = 'SteadyBar'
+
 local function trim_whitespace(value)
   return (value:gsub("^%s+", ""):gsub("%s+$", ""))
 end

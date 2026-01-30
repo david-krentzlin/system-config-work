@@ -8,7 +8,10 @@ color-modes = true
 trim-trailing-whitespace = true
 
 [editor.cursor-shape]
-insert = "underline"
+normal = 'block'
+insert = 'bar'
+select = 'underline'
+
 
 [editor.inline-diagnostics]
 cursor-line = "disable"
