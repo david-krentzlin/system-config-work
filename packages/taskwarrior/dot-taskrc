@@ -1,12 +1,6 @@
-# [Created by task 3.4.2 1/29/2026 08:49:44]
-data.location=/Users/david.krentzlin/.task
+data.location=~/Documents/tasks
 news.version=3.4.2
 
-# To use the default location of the XDG directories,
-# move this configuration file from ~/.taskrc to ~/.config/task/taskrc and update location config as follows:
-
-#data.location=~/.local/share/task
-#hooks.location=~/.config/task/hooks
 
 # Color theme (uncomment one to use)
 #include light-16.theme
@@ -21,5 +15,4 @@ news.version=3.4.2
 #include dark-yellow-green.theme
 #include dark-gray-256.theme
 ## Custom theme based on modus vivendi
-include ~/.taskrc.d/modus-vivendi.theme
-data.location=~/Documents/tasks
+#include ~/.taskrc.d/modus-vivendi.theme
