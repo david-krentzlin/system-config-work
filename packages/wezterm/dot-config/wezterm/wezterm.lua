@@ -347,7 +347,7 @@ config.keys = {
 
   {
     key = "t",
-    mods = "ALT",
+    mods = "LEADER",
     action = act.SplitPane {
       direction = "Right",
       size = { Percent = 40 },
@@ -355,7 +355,7 @@ config.keys = {
         args = {
           "zsh",
           "-lic",
-          "if command -v taskwarrior-tui >/dev/null 2>&1; then exec taskwarrior-tui; else echo 'taskwarrior-tui not found on PATH'; exec zsh -l; fi",
+          "if command -v tasksh >/dev/null 2>&1; then exec tasksh; else echo 'tasksh not found on PATH'; exec zsh -l; fi",
         },
       },
     },
