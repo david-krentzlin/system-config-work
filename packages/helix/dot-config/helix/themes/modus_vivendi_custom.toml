@@ -13,6 +13,7 @@ inherits = "modus_vivendi"
 "ui.popup.info" = { bg = "#0a0a0a", fg = "#7a7a7a" }
 "ui.menu" = { bg = "#0a0a0a" }
 "ui.menu.selected" = { bg = "#151515" }
-"ui.selection" = { bg = "#202020" }
-"ui.selection.primary" = { bg = "#202020" }
+"ui.help" = { bg = "#0a0a0a" }
+"ui.selection" = { bg = "#2a2a2a" }
+"ui.selection.primary" = { bg = "#333333" }
 "ui.virtual.whitespace" = { fg = "#000000" }
