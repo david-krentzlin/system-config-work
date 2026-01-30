@@ -15,10 +15,35 @@ cursor-line = "disable"
 other-lines = "disable"
 
 [editor.statusline]
-left = ["mode", "spinner", "file-name", "read-only-indicator", "file-modification-indicator"]
-right = ["diagnostics", "workspace-diagnostics", "version-control", "position", "total-line-numbers", "file-type"]
+left = [
+  "mode",
+  "spinner",
+  "file-name",
+  "read-only-indicator",
+  "file-modification-indicator",
+]
+right = [
+  "diagnostics",
+  "workspace-diagnostics",
+  "version-control",
+  "position",
+  "total-line-numbers",
+  "file-type",
+]
 
 [editor.statusline.mode]
 normal = "🅝"
 insert = "🅘"
 select = "🅢"
+
+
+[keys.normal]
+C-g = [
+  ":new",
+  ":insert-output lazygit >/dev/tty",
+  ":set mouse false",
+  ":set mouse true",
+  ":buffer-close!",
+  ":redraw",
+  ":reload-all",
+]
