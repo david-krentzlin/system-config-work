@@ -6,7 +6,7 @@ default-yank-register = "+"
 end-of-line-diagnostics = "warning"
 color-modes = true
 trim-trailing-whitespace = true
-popup-border = "menu"
+popup-border = "all"
 
 [editor.cursor-shape]
 normal = 'block'

@@ -12,7 +12,7 @@ config.font = wezterm.font_with_fallback({
 config.font_size = 14
 config.hide_tab_bar_if_only_one_tab = true
 config.use_fancy_tab_bar = false
-config.leader = { key = ",", mods = "ALT", timeout_milliseconds = 1000 }
+config.leader = { key = ".", mods = "ALT", timeout_milliseconds = 1000 }
 config.window_padding = {
   left = 6,
   right = 6,
@@ -309,7 +309,7 @@ config.keys = {
 				args = {
 					"zsh",
 					"-lic",
-					"root=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$root\"; if command -v lazygit >/dev/null 2>&1; then exec lazygit; else echo 'lazygit not found on PATH'; exec zsh -l; fi",
+					"root=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$root\"; if command -v lazygit >/dev/null 2>&1; then exec lazygit -ucf ~/.config/lazygit/config.yml; else echo 'lazygit not found on PATH'; exec zsh -l; fi",
 				},
 			},
 		},
@@ -346,10 +346,25 @@ config.keys = {
 			},
 		},
 	},
-
   {
     key = "t",
     mods = "LEADER",
+    action = act.SplitPane {
+      direction = "Right",
+      size = { Percent = 40 },
+      command = {
+        args = {
+          "zsh",
+          "-lic",
+          "if command -v tasksh >/dev/null 2>&1; then exec taskwarrior-tui; else echo 'taskwarrior-tui not found on PATH'; exec zsh -l; fi",
+        },
+      },
+    },
+  },
+
+  {
+    key = "t",
+    mods = "LEADER|SHIFT",
     action = act.SplitPane {
       direction = "Right",
       size = { Percent = 40 },
