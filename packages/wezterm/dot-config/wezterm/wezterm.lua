@@ -22,6 +22,14 @@ config.window_padding = {
 
 config.default_cursor_style = 'SteadyBar'
 
+config.unix_domains = {
+  {
+    name = 'unix',
+  },
+}
+
+config.default_gui_startup_args = { 'connect', 'unix' }
+
 local function trim_whitespace(value)
   return (value:gsub("^%s+", ""):gsub("%s+$", ""))
 end
