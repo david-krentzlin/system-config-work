@@ -2,17 +2,11 @@ data.location=~/Documents/tasks
 news.version=3.4.2
 
 
-# Color theme (uncomment one to use)
-#include light-16.theme
-#include light-256.theme
-#include bubblegum-256.theme
-#include dark-16.theme
-#include dark-256.theme
-#include dark-red-256.theme
-#include dark-green-256.theme
-#include dark-blue-256.theme
-#include dark-violets-256.theme
-#include dark-yellow-green.theme
-#include dark-gray-256.theme
-## Custom theme based on modus vivendi
-#include ~/.taskrc.d/modus-vivendi.theme
+urgency.user.tag.problem.coefficient=4.5
+urgency.user.tag.later.coefficient=-6.0
+
+
+# --- Modus-vivendi-ish (pastel) 256-color setup -----------------
+
+color.enabled=on
+
