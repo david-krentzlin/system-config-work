@@ -1,0 +1,27 @@
+
+# yazi.toml — productivity-focused defaults for software engineers
+
+[log]
+# keep logging off normally; enable only for debugging
+enabled = false
+
+[mgr]
+# show dotfiles by default (use . to toggle interactively too)
+show_hidden = true
+
+# natural sorting (numbers in names sort as numbers); dir-first helps repository browsing
+sort_by = "natural"
+sort_dir_first = true
+sort_reverse = false
+# how file mtime/name sorting behaves can be toggled at runtime via keymap
+
+# appearance of current working dir text (theme overrides will also apply)
+cwd = { fg = "#cbd5e0" }
+
+# quick preview sizing: prefer a compact preview pane that can be maximized
+preview_ratio = 40 # percent width for preview pane in a split layout
+
+
+# Finder / search integration: point to built-in helper resources (resources repo has scripts)
+# You can later install yafg / fazif resource scripts (see Yazi resources page)
+# (No special config required beyond ensuring rg / fzf are installed)

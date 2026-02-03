@@ -1,0 +1,27 @@
+# Modus Vivendi inspired accents for Taskwarrior
+
+# Keep default precedence from stock dark themes
+rule.precedence.color=deleted,completed,active,keyword.,tag.,project.,overdue,scheduled,due.today,due,blocked,blocking,recurring,tagged,uda.
+
+# Interface accents
+color.header=#2fafff
+color.footnote=#61647a
+color.warning=bold #ff5f59
+color.error=white on #7a1c1c
+color.alternate=on color235
+
+# Task states
+color.active=#2fafff on color236
+color.recurring=#b6a0ff
+color.scheduled=on rgb001
+color.blocked=#e0e6f0 on color8
+color.blocking=#1e1e1e on #2fafff
+
+# Tags
+color.tag.next=#2fafff
+color.tagged=
+
+# Due dates
+color.due.today=#ff5f59
+color.due=#ff5f59
+color.overdue=bold #ff5f59

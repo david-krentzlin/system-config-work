@@ -1,0 +1,49 @@
+
+[language-server.dprint]
+command = "dprint"
+args = ["lsp"]
+
+# Extra language server you’re adding (used for Markdown diagnostics + code actions)
+[language-server.ltex-ls]
+command = "ltex-ls"
+
+[language-server.taplo.config]
+config = {}
+
+# Ruby: use Rufo + format-on-save
+[[language]]
+name = "ruby"
+formatter = { command = "rufo", args = ["--simple-exit"] }
+auto-format = true
+
+# JSON/TOML/Markdown: force dprint as formatter
+[[language]]
+name = "json"
+language-servers = ["dprint"]
+auto-format = true
+
+[[language]]
+name = "toml"
+language-servers = ["taplo"]
+auto-format = true
+
+[[language]]
+name = "markdown"
+formatter = { command = "sh", args = [
+  "-c",
+  "dprint fmt --stdin %{buffer_name} --config $HOME/.config/helix/dprint.json",
+] }
+language-servers = [
+  # keep marksman, but disable its formatting so dprint is the formatter
+  { name = "marksman", except-features = ["format"] },
+  # add ltex-ls only for diagnostics + code actions
+  { name = "ltex-ls", only-features = ["diagnostics", "code-action"] },
+  { name = "dprint", only-features = ["format"] },
+]
+auto-format = true
+
+# YAML: yq formatter (optional, but you had it for a reason)
+[[language]]
+name = "yaml"
+formatter = { command = "yq", args = ["-P", "."] }
+auto-format = true

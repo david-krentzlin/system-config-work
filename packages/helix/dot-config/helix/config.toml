@@ -1,0 +1,55 @@
+theme = "modus_vivendi_custom"
+
+[editor]
+clipboard-provider = "pasteboard"
+default-yank-register = "+"
+end-of-line-diagnostics = "warning"
+color-modes = true
+trim-trailing-whitespace = true
+popup-border = "all"
+
+[editor.cursor-shape]
+normal = 'block'
+insert = 'bar'
+select = 'underline'
+
+
+[editor.inline-diagnostics]
+cursor-line = "disable"
+other-lines = "disable"
+
+[editor.statusline]
+left = [
+  "mode",
+  "spinner",
+  "file-name",
+  "read-only-indicator",
+  "file-modification-indicator",
+]
+right = [
+  "diagnostics",
+  "workspace-diagnostics",
+  "version-control",
+  "position",
+  "total-line-numbers",
+  "file-type",
+]
+
+[editor.statusline.mode]
+normal = "🅝"
+insert = "🅘"
+select = "🅢"
+
+
+[keys.normal]
+C-s = [":w"]
+D = ["ensure_selections_forward", "extend_to_line_end", "delete_selection"]
+C-g = [
+  ":new",
+  ":insert-output lazygit >/dev/tty",
+  ":set mouse false",
+  ":set mouse true",
+  ":buffer-close!",
+  ":redraw",
+  ":reload-all",
+]

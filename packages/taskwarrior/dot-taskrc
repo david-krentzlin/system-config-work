@@ -1,0 +1,12 @@
+data.location=~/Documents/tasks
+news.version=3.4.2
+
+
+urgency.user.tag.problem.coefficient=4.5
+urgency.user.tag.later.coefficient=-6.0
+
+
+# --- Modus-vivendi-ish (pastel) 256-color setup -----------------
+
+color.enabled=on
+

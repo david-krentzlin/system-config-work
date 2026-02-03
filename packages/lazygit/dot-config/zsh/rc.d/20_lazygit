@@ -1,0 +1,1 @@
+alias g='lazygit -ucf ~/.config/lazygit/config.yml'

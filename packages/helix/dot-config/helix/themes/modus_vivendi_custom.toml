@@ -1,0 +1,19 @@
+inherits = "modus_vivendi"
+
+"ui.gutter" = { bg = "#000000" }
+"ui.gutter.selected" = { bg = "#000000" }
+"ui.linenr" = { bg = "#000000" }
+"ui.linenr.selected" = { fg = "#2fafff", bg = "#000000" }
+"ui.statusline" = { bg = "#101010" }
+"ui.statusline.inactive" = { bg = "#0a0a0a" }
+"ui.statusline.normal" = { fg = "#2fafff", bg = "#101010" }
+"ui.statusline.insert" = { fg = "#44bc44", bg = "#101010" }
+"ui.statusline.select" = { fg = "#b6a0ff", bg = "#101010" }
+"ui.popup" = { bg = "#0a0a0a" }
+"ui.popup.info" = { bg = "#0a0a0a", fg = "#7a7a7a" }
+"ui.menu" = { bg = "#0a0a0a" }
+"ui.menu.selected" = { bg = "#151515" }
+"ui.help" = { bg = "#0a0a0a" }
+"ui.selection" = { bg = "#2a2a2a" }
+"ui.selection.primary" = { bg = "#333333" }
+"ui.virtual.whitespace" = { fg = "#000000" }
