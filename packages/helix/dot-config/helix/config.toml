@@ -42,6 +42,8 @@ select = "🅢"
 
 
 [keys.normal]
+C-s = [":w"]
+D = ["ensure_selections_forward", "extend_to_line_end", "delete_selection"]
 C-g = [
   ":new",
   ":insert-output lazygit >/dev/tty",

@@ -7,7 +7,7 @@ config.color_scheme = "Modus-Vivendi"
 config.font = wezterm.font_with_fallback({
 	{ family = "Fira Code", weight = "Regular" },
 	{ family = "Terminess Nerd Font", weight = "Regular" },
-	{ family = "Terminess (TTF) Nerd Font", weight = "Regular" },
+  { family = "Terminess (TTF) Nerd Font", weight = "Regular" },
 })
 config.font_size = 14
 config.hide_tab_bar_if_only_one_tab = true
@@ -278,7 +278,7 @@ config.keys = {
 	{ key = "s", mods = "LEADER", action = act.ShowLauncher },
 	{ key = "p", mods = "LEADER", action = wezterm.action_callback(project_workspace_picker) },
 	{ key = "w", mods = "LEADER", action = wezterm.action_callback(workspace_switcher) },
-	{ key = "n", mods = "LEADER", action = wezterm.action_callback(prompt_new_workspace) },
+	{ key = "w", mods = "LEADER|SHIFT", action = wezterm.action_callback(prompt_new_workspace) },
   { key = "r", mods = "LEADER", action = wezterm.action_callback(prompt_rename_workspace) },
   { key = ",", mods = "LEADER", action = wezterm.action_callback(pmd_context_picker) },
   { key = "+", mods = "SUPER", action = act.IncreaseFontSize },
@@ -319,6 +319,30 @@ config.keys = {
 					"-lic",
 					"root=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$root\"; if command -v lazygit >/dev/null 2>&1; then exec lazygit -ucf ~/.config/lazygit/config.yml; else echo 'lazygit not found on PATH'; exec zsh -l; fi",
 				},
+			},
+		},
+	},
+
+	{
+		key = "n",
+		mods = "LEADER",
+		action = act.SplitPane {
+			direction = "Right",
+			size = { Percent = 50 },
+			command = {
+				args = { "zsh", "-lic", "hx ~/Documents/Notes" }
+			},
+		},
+	},
+
+  {
+		key = "N",
+		mods = "LEADER|SHIFT",
+		action = act.SplitPane {
+			direction = "Right",
+			size = { Percent = 50 },
+			command = {
+				args = { "zsh", "-lic", "yazi ~/Documents/Notes" }
 			},
 		},
 	},
@@ -388,3 +412,4 @@ config.keys = {
 }
 
 return config
+
