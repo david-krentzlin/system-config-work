@@ -45,11 +45,9 @@ select = "🅢"
 C-s = [":w"]
 D = ["ensure_selections_forward", "extend_to_line_end", "delete_selection"]
 C-e = [
-  ":new",
   ":insert-output yazi %{buffer_name} > /dev/tty",
   ":set mouse false",
   ":set mouse true",
-  ":buffer-close!",
   ":redraw",
   ":reload-all",
 ]
