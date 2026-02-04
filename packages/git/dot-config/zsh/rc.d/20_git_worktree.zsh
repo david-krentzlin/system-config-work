@@ -53,8 +53,10 @@ git-bare-clone() {
     fi
 
     # Configure the bare repo to not show status warnings
-    cd "$target_dir/.git"
+    pushd "$target_dir/.git"
     git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+    popd
+
 
     echo "✓ Bare repository created at $target_dir/.git"
     echo ""
@@ -112,8 +114,26 @@ git-worktree-new() {
         return 1
     fi
 
-    echo "Creating worktree for branch: $branch_name (based on $base_branch)"
-    git worktree add -b "$branch_name" "$branch_name" "$base_branch"
+    # Check if worktree directory already exists
+    if [[ -d "$branch_name" ]]; then
+        echo "Error: Worktree directory '$branch_name' already exists"
+        echo ""
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "Next: cd $branch_name"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        return 0
+    fi
+
+    # Check if branch already exists
+    if git show-ref --verify --quiet refs/heads/"$branch_name" 2>/dev/null; then
+        echo "Branch '$branch_name' already exists."
+        echo ""
+        echo "Creating worktree for existing branch..."
+        git worktree add "$branch_name" "$branch_name"
+    else
+        echo "Creating worktree for new branch: $branch_name (based on $base_branch)"
+        git worktree add -b "$branch_name" "$branch_name" "$base_branch"
+    fi
 
     if [[ $? -eq 0 ]]; then
         echo "✓ Worktree created at ./$branch_name"
@@ -194,35 +214,35 @@ git-worktree-convert() {
         echo "Error: Not in a git repository or already a worktree"
         return 1
     fi
-    
+
     # Check if it's already a bare repo
     if grep -q "bare = true" ".git/config" 2>/dev/null; then
         echo "Error: This is already a bare repository"
         return 1
     fi
-    
+
     # Get the current branch
     local current_branch=$(git branch --show-current)
     if [[ -z "$current_branch" ]]; then
         echo "Error: Could not determine current branch"
         return 1
     fi
-    
+
     # Get the repository root and name
     local repo_root=$(git rev-parse --show-toplevel)
     local repo_name=$(basename "$repo_root")
     local parent_dir=$(dirname "$repo_root")
-    
+
     # Allow specifying a different parent directory
     local new_parent="${1:-$parent_dir}"
     local new_location="$new_parent/$repo_name"
-    
+
     # Check for uncommitted changes
     if ! git diff-index --quiet HEAD -- 2>/dev/null; then
         echo "Error: You have uncommitted changes. Please commit or stash them first."
         return 1
     fi
-    
+
     echo "Converting $repo_root to worktree-based setup..."
     echo "Current branch: $current_branch"
     echo "Target location: $new_location"
@@ -233,39 +253,40 @@ git-worktree-convert() {
         echo "Aborted"
         return 1
     fi
-    
+
     # Get the remote URL before we move things around
     local remote_url=$(git remote get-url origin 2>/dev/null)
-    
+
     # Create a temporary name for the transition
     local temp_dir="${new_location}.tmp"
-    
+
     # Step 1: Move current .git to temporary location
     echo "Step 1: Creating bare repository..."
     mv "$repo_root/.git" "$temp_dir"
-    
+
     # Step 2: Configure it as a bare repository
     cd "$temp_dir"
     git config --bool core.bare true
     git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
-    
+
     # Step 3: Create the new structure
     echo "Step 2: Setting up new directory structure..."
     mkdir -p "$new_location"
     mv "$temp_dir" "$new_location/.git"
-    
+
     # Step 4: Create worktree for the current branch
     echo "Step 3: Creating worktree for $current_branch..."
     cd "$new_location"
     git worktree add "$current_branch" "$current_branch"
-    
+
     # Step 5: Copy over any untracked files from the old location
     echo "Step 4: Moving working directory contents..."
-    if [[ -d "$repo_root" ]]; then
-        # Use rsync to copy, excluding .git
+
+    # Check if we're doing in-place conversion or moving to new location
+    if [[ "$repo_root" != "$new_location" ]]; then
+        # Moving to a different location - copy files and ask about cleanup
         rsync -a --exclude='.git' "$repo_root/" "$new_location/$current_branch/"
-        
-        # Remove old directory
+
         echo ""
         echo -n "Remove old directory $repo_root? [y/N] "
         read response
@@ -275,8 +296,30 @@ git-worktree-convert() {
         else
             echo "Note: Old directory left at $repo_root (you can remove it manually)"
         fi
+    else
+        # In-place conversion - move files from root into worktree subdirectory
+        # First, move all files (except .git which is already moved) into the worktree
+        for item in "$repo_root"/*; do
+            # Skip .git and the new worktree directory
+            local basename=$(basename "$item")
+            if [[ "$basename" != ".git" && "$basename" != "$current_branch" ]]; then
+                mv "$item" "$new_location/$current_branch/"
+            fi
+        done
+
+        # Also move hidden files
+        for item in "$repo_root"/.[^.]*; do
+            if [[ -e "$item" ]]; then
+                local basename=$(basename "$item")
+                if [[ "$basename" != ".git" ]]; then
+                    mv "$item" "$new_location/$current_branch/"
+                fi
+            fi
+        done
+
+        echo "✓ Files moved to worktree"
     fi
-    
+
     echo ""
     echo "✓ Conversion complete!"
     echo "✓ Bare repository: $new_location/.git"
