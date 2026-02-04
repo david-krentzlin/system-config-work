@@ -256,6 +256,32 @@ local function pmd_context_picker(window, pane)
   )
 end
 
+wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
+  local title = tostring(tab.tab_index + 1)
+  local pane = tab.active_pane
+  
+  -- Get the pane title which often contains git branch info
+  local pane_title = pane.title
+  
+  -- Try to extract branch from pane title if it's in the format "user@host:path (branch)"
+  -- or just use the current working directory name
+  local cwd_uri = pane.current_working_dir
+  if cwd_uri then
+    local cwd = cwd_uri.file_path or tostring(cwd_uri)
+    cwd = cwd:gsub("file://[^/]*/", "/")
+    
+    -- Get the directory name (which in worktree setup is the branch name)
+    local dir_name = cwd:match("([^/]+)/?$")
+    if dir_name and dir_name ~= "" then
+      title = title .. ": " .. dir_name
+    end
+  end
+  
+  return {
+    { Text = " " .. title .. " " },
+  }
+end)
+
 wezterm.on("gui-startup", function(cmd)
   local cwd = cmd and cmd.cwd or nil
   local workspace_name = "organization"
