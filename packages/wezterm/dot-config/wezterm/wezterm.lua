@@ -5,9 +5,8 @@ local config = wezterm.config_builder()
 
 config.color_scheme = "Modus-Vivendi"
 config.font = wezterm.font_with_fallback({
-	{ family = "Fira Code", weight = "Regular" },
-	{ family = "Terminess Nerd Font", weight = "Regular" },
-  { family = "Terminess (TTF) Nerd Font", weight = "Regular" },
+  { family = "FiraCode Nerd Font Mono", weight = "Regular" },
+  { family = "FiraCode Nerd Font",      weight = "Regular" },
 })
 config.font_size = 14
 config.hide_tab_bar_if_only_one_tab = true
@@ -112,7 +111,7 @@ local function project_workspace_picker(window, pane)
         prompt_window:perform_action(
           act.SwitchToWorkspace {
             name = workspace_name,
-            spawn = { cwd = project_dir  },
+            spawn = { cwd = project_dir },
           },
           prompt_pane
         )
@@ -214,9 +213,9 @@ end
 
 local function pmd_context_picker(window, pane)
   local choices = {
-    { id = "projects", label = "projects" },
-    { id = "teams", label = "teams" },
-    { id = "people", label = "people" },
+    { id = "projects",      label = "projects" },
+    { id = "teams",         label = "teams" },
+    { id = "people",        label = "people" },
     { id = "servicegroups", label = "servicegroups" },
   }
 
@@ -259,24 +258,24 @@ end
 wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
   local title = tostring(tab.tab_index + 1)
   local pane = tab.active_pane
-  
+
   -- Get the pane title which often contains git branch info
   local pane_title = pane.title
-  
+
   -- Try to extract branch from pane title if it's in the format "user@host:path (branch)"
   -- or just use the current working directory name
   local cwd_uri = pane.current_working_dir
   if cwd_uri then
     local cwd = cwd_uri.file_path or tostring(cwd_uri)
     cwd = cwd:gsub("file://[^/]*/", "/")
-    
+
     -- Get the directory name (which in worktree setup is the branch name)
     local dir_name = cwd:match("([^/]+)/?$")
     if dir_name and dir_name ~= "" then
       title = title .. ": " .. dir_name
     end
   end
-  
+
   return {
     { Text = " " .. title .. " " },
   }
@@ -295,115 +294,115 @@ wezterm.on("gui-startup", function(cmd)
     direction = "Right",
     size = 0.5,
     cwd = cwd,
-    args = command_or_shell( "tasksh" ),
+    args = command_or_shell("tasksh"),
   }
 end)
 
 config.keys = {
-	{ key = "t", mods = "LEADER", action = act.SendKey { key = "t", mods = "CTRL" } },
-	{ key = "s", mods = "LEADER", action = act.ShowLauncher },
-	{ key = "p", mods = "LEADER", action = wezterm.action_callback(project_workspace_picker) },
-	{ key = "w", mods = "LEADER", action = wezterm.action_callback(workspace_switcher) },
-	{ key = "w", mods = "LEADER|SHIFT", action = wezterm.action_callback(prompt_new_workspace) },
-  { key = "r", mods = "LEADER", action = wezterm.action_callback(prompt_rename_workspace) },
-  { key = ",", mods = "LEADER", action = wezterm.action_callback(pmd_context_picker) },
-  { key = "+", mods = "SUPER", action = act.IncreaseFontSize },
-  { key = "-", mods = "SUPER", action = act.DecreaseFontSize },
-  { key = "c", mods = "ALT", action = act.SpawnTab "CurrentPaneDomain" },
-  { key = "[", mods = "ALT", action = act.ActivateTabRelative(-1) },
-  { key = "]", mods = "ALT", action = act.ActivateTabRelative(1) },
-  { key = "1", mods = "ALT", action = act.ActivateTab(0) },
-  { key = "2", mods = "ALT", action = act.ActivateTab(1) },
-  { key = "3", mods = "ALT", action = act.ActivateTab(2) },
-  { key = "4", mods = "ALT", action = act.ActivateTab(3) },
-  { key = "5", mods = "ALT", action = act.ActivateTab(4) },
-  { key = "6", mods = "ALT", action = act.ActivateTab(5) },
-  { key = "7", mods = "ALT", action = act.ActivateTab(6) },
-  { key = "8", mods = "ALT", action = act.ActivateTab(7) },
-  { key = "9", mods = "ALT", action = act.ActivateTab(8) },
-	{ key = "x", mods = "ALT", action = act.CloseCurrentPane { confirm = false } },
-  { key = "z", mods = "ALT", action = act.TogglePaneZoomState },
-  { key = "h", mods = "ALT", action = act.ActivatePaneDirection "Left" },
-  { key = "j", mods = "ALT", action = act.ActivatePaneDirection "Down" },
-  { key = "k", mods = "ALT", action = act.ActivatePaneDirection "Up" },
-  { key = "l", mods = "ALT", action = act.ActivatePaneDirection "Right" },
-  { key = "H", mods = "ALT|SHIFT", action = act.AdjustPaneSize { "Left", 5 } },
-  { key = "J", mods = "ALT|SHIFT", action = act.AdjustPaneSize { "Down", 5 } },
-  { key = "K", mods = "ALT|SHIFT", action = act.AdjustPaneSize { "Up", 5 } },
-  { key = "L", mods = "ALT|SHIFT", action = act.AdjustPaneSize { "Right", 5 } },
-  { key = "v", mods = "LEADER", action = act.SplitHorizontal { domain = "CurrentPaneDomain" } },
-  { key = "h", mods = "LEADER", action = act.SplitVertical { domain = "CurrentPaneDomain" } },
-	{
-		key = "g",
-		mods = "LEADER",
-		action = act.SplitPane {
-			direction = "Right",
-			size = { Percent = 50 },
-			command = {
-				args = {
-					"zsh",
-					"-lic",
-					"root=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$root\"; if command -v lazygit >/dev/null 2>&1; then exec lazygit -ucf ~/.config/lazygit/config.yml; else echo 'lazygit not found on PATH'; exec zsh -l; fi",
-				},
-			},
-		},
-	},
-
-	{
-		key = "n",
-		mods = "LEADER",
-		action = act.SplitPane {
-			direction = "Right",
-			size = { Percent = 50 },
-			command = {
-				args = { "zsh", "-lic", "hx ~/Documents/Notes" }
-			},
-		},
-	},
+  { key = "t", mods = "LEADER",       action = act.SendKey { key = "t", mods = "CTRL" } },
+  { key = "s", mods = "LEADER",       action = act.ShowLauncher },
+  { key = "p", mods = "LEADER",       action = wezterm.action_callback(project_workspace_picker) },
+  { key = "w", mods = "LEADER",       action = wezterm.action_callback(workspace_switcher) },
+  { key = "w", mods = "LEADER|SHIFT", action = wezterm.action_callback(prompt_new_workspace) },
+  { key = "r", mods = "LEADER",       action = wezterm.action_callback(prompt_rename_workspace) },
+  { key = ",", mods = "LEADER",       action = wezterm.action_callback(pmd_context_picker) },
+  { key = "+", mods = "SUPER",        action = act.IncreaseFontSize },
+  { key = "-", mods = "SUPER",        action = act.DecreaseFontSize },
+  { key = "c", mods = "ALT",          action = act.SpawnTab "CurrentPaneDomain" },
+  { key = "[", mods = "ALT",          action = act.ActivateTabRelative(-1) },
+  { key = "]", mods = "ALT",          action = act.ActivateTabRelative(1) },
+  { key = "1", mods = "ALT",          action = act.ActivateTab(0) },
+  { key = "2", mods = "ALT",          action = act.ActivateTab(1) },
+  { key = "3", mods = "ALT",          action = act.ActivateTab(2) },
+  { key = "4", mods = "ALT",          action = act.ActivateTab(3) },
+  { key = "5", mods = "ALT",          action = act.ActivateTab(4) },
+  { key = "6", mods = "ALT",          action = act.ActivateTab(5) },
+  { key = "7", mods = "ALT",          action = act.ActivateTab(6) },
+  { key = "8", mods = "ALT",          action = act.ActivateTab(7) },
+  { key = "9", mods = "ALT",          action = act.ActivateTab(8) },
+  { key = "x", mods = "ALT",          action = act.CloseCurrentPane { confirm = false } },
+  { key = "z", mods = "ALT",          action = act.TogglePaneZoomState },
+  { key = "h", mods = "ALT",          action = act.ActivatePaneDirection "Left" },
+  { key = "j", mods = "ALT",          action = act.ActivatePaneDirection "Down" },
+  { key = "k", mods = "ALT",          action = act.ActivatePaneDirection "Up" },
+  { key = "l", mods = "ALT",          action = act.ActivatePaneDirection "Right" },
+  { key = "H", mods = "ALT|SHIFT",    action = act.AdjustPaneSize { "Left", 5 } },
+  { key = "J", mods = "ALT|SHIFT",    action = act.AdjustPaneSize { "Down", 5 } },
+  { key = "K", mods = "ALT|SHIFT",    action = act.AdjustPaneSize { "Up", 5 } },
+  { key = "L", mods = "ALT|SHIFT",    action = act.AdjustPaneSize { "Right", 5 } },
+  { key = "v", mods = "LEADER",       action = act.SplitHorizontal { domain = "CurrentPaneDomain" } },
+  { key = "h", mods = "LEADER",       action = act.SplitVertical { domain = "CurrentPaneDomain" } },
+  {
+    key = "g",
+    mods = "LEADER",
+    action = act.SplitPane {
+      direction = "Right",
+      size = { Percent = 50 },
+      command = {
+        args = {
+          "zsh",
+          "-lic",
+          "root=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$root\"; if command -v lazygit >/dev/null 2>&1; then exec lazygit -ucf ~/.config/lazygit/config.yml; else echo 'lazygit not found on PATH'; exec zsh -l; fi",
+        },
+      },
+    },
+  },
 
   {
-		key = "N",
-		mods = "LEADER|SHIFT",
-		action = act.SplitPane {
-			direction = "Right",
-			size = { Percent = 50 },
-			command = {
-				args = { "zsh", "-lic", "yazi ~/Documents/Notes" }
-			},
-		},
-	},
-
-	{
-		key = "a",
-		mods = "LEADER",
-		action = act.SplitPane {
-			direction = "Right",
-			size = { Percent = 50 },
-			command = {
-				args = {
-					"zsh",
-					"-lic",
-					"root=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$root\"; if command -v opencode >/dev/null 2>&1; then exec opencode; else echo 'opencode not found on PATH'; exec zsh -l; fi",
-				},
-			},
-		},
-	},
+    key = "n",
+    mods = "LEADER",
+    action = act.SplitPane {
+      direction = "Right",
+      size = { Percent = 50 },
+      command = {
+        args = { "zsh", "-lic", "hx ~/Documents/Notes" }
+      },
+    },
+  },
 
   {
-		key = "e",
-		mods = "LEADER",
-		action = act.SplitPane {
-			direction = "Right",
-			size = { Percent = 60 },
-			command = {
-				args = {
-					"zsh",
-					"-lic",
-					"root=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$root\"; if command -v yazi >/dev/null 2>&1; then exec yazi; else echo 'yazi not found on PATH'; exec zsh -l; fi",
-				},
-			},
-		},
-	},
+    key = "N",
+    mods = "LEADER|SHIFT",
+    action = act.SplitPane {
+      direction = "Right",
+      size = { Percent = 50 },
+      command = {
+        args = { "zsh", "-lic", "yazi ~/Documents/Notes" }
+      },
+    },
+  },
+
+  {
+    key = "a",
+    mods = "LEADER",
+    action = act.SplitPane {
+      direction = "Right",
+      size = { Percent = 50 },
+      command = {
+        args = {
+          "zsh",
+          "-lic",
+          "root=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$root\"; if command -v opencode >/dev/null 2>&1; then exec opencode; else echo 'opencode not found on PATH'; exec zsh -l; fi",
+        },
+      },
+    },
+  },
+
+  {
+    key = "e",
+    mods = "LEADER",
+    action = act.SplitPane {
+      direction = "Right",
+      size = { Percent = 60 },
+      command = {
+        args = {
+          "zsh",
+          "-lic",
+          "root=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$root\"; if command -v yazi >/dev/null 2>&1; then exec yazi; else echo 'yazi not found on PATH'; exec zsh -l; fi",
+        },
+      },
+    },
+  },
   {
     key = "t",
     mods = "LEADER",
@@ -438,4 +437,3 @@ config.keys = {
 }
 
 return config
-

@@ -1,0 +1,1 @@
+/Users/david.krentzlin/.config/opencode/superpowers/.opencode/plugins/superpowers.js

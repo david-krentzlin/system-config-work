@@ -1,0 +1,59 @@
+# equals doesn't matter.
+theme = Nord 
+#background = 000000
+
+#font-family = "IosevkaTerm Nerd Font Mono"
+
+#font-family = "JetBrainsMono Nerd Font"
+font-family = "Hasklug Nerd Font Mono Med"
+font-size = 13
+font-thicken = true
+font-family-italic = "Cartograph CF Italic"
+font-family-bold-italic = "Cartograph CF Italic"
+adjust-underline-position = 6
+adjust-underline-thickness = 40%
+
+# Cursor:
+cursor-color = F8F8F2
+cursor-style-blink = false
+cursor-text = 000000
+adjust-cursor-thickness = 150%
+
+shell-integration-features = ssh-terminfo
+shell-integration-features = no-cursor
+shell-integration-features = ssh-env
+
+# Splits:
+unfocused-split-opacity = 0.4
+split-divider-color = A7DFEF
+
+# Let me close stuff in peace:
+confirm-close-surface = false
+
+# Keybinds
+keybind = alt+left=unbind
+keybind = alt+right=unbind
+keybind = alt+up=unbind
+keybind = alt+down=unbind
+
+keybind = alt+n=goto_split:next
+
+keybind = alt+l=goto_split:right
+keybind = alt+shift+l=resize_split:right,10
+
+keybind = alt+h=goto_split:left
+keybind = alt+shift+h=resize_split:left,10
+
+keybind = alt+k=goto_split:up
+keybind = alt+shift+k=resize_split:up,10
+
+keybind = alt+j=goto_split:down
+keybind = alt+shift+j=resize_split:down,10
+
+# Macos
+window-title-font-family = "Hasklug Nerd Font Mono Med"
+macos-option-as-alt = true
+macos-window-shadow = false
+quit-after-last-window-closed = true
+mouse-hide-while-typing = true
+macos-titlebar-proxy-icon = hidden
