@@ -49,5 +49,9 @@ export GIT_EDITOR="$VISUAL"
 export LC_ALL=en_US.UTF-8
 export CLICOLOR=1
 
+# Git worktree paths
+export DK_CODE_PATH="$HOME/NewWork/Code"
+export DK_WORKTREES_PATH="$HOME/NewWork/Code/worktrees"
+
 # PATH
 PATH=~/.local/bin:~/.cargo/bin:~/bin:${PATH}
