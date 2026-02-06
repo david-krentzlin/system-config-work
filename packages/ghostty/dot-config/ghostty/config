@@ -124,3 +124,5 @@ keybind = alt+left=unbind
 keybind = alt+right=unbind
 keybind = alt+up=unbind
 keybind = alt+down=unbind
+keybind = alt+n=unbind
+keybind = alt+p=unbind
