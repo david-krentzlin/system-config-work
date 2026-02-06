@@ -19,6 +19,7 @@ eval "$(starship init zsh)"
 
 # zoxide
 eval "$(zoxide init zsh)"
+alias zl='z $(zoxide query -i)'
 
 # atuin
 eval "$(atuin init zsh)"
