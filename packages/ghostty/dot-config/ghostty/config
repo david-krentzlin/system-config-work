@@ -8,7 +8,7 @@ config-file = themes/modus-vivendi
 # ============================================================================
 #font-family = "FiraCode Nerd Font Mono"
 font-family = "Maple Mono NF"
-font-size  14
+font-size=13.7
 font-thicken = false
 
 # ============================================================================

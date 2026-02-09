@@ -71,7 +71,7 @@ _wt_detect_main_branch() {
         echo "main"
         return
     fi
-    
+
     if git show-ref --verify --quiet refs/remotes/origin/master 2>/dev/null; then
         echo "master"
         return
@@ -111,6 +111,23 @@ _wt_sanitize_branch_name() {
     # Keep: alphanumeric, dash, underscore, dot
     branch_name="${branch_name//[^a-zA-Z0-9._-]/}"
     echo "$branch_name"
+}
+
+_wt_branch_exists() {
+  local branch_name="$1"
+  local branch_exists=0
+
+  if git show-ref --verify --quiet refs/heads/"$branch_name" 2>/dev/null; then
+    branch_exists=1
+  fi
+
+  if [  $branch_exists != 0 ]; then
+    if git ls-remote --exit-code --heads heads/"${branch_name}" 2>/dev/null; then
+      branch_exists=1
+    fi
+  fi
+
+  return branch_exists
 }
 
 # ============================================================================
@@ -181,7 +198,7 @@ wt() {
 
     # Check if branch already exists
     local branch_exists=0
-    if git show-ref --verify --quiet refs/heads/"$branch_name" 2>/dev/null; then
+    if _wt_branch_exists "$branch_name"; then
         branch_exists=1
     fi
 
@@ -221,7 +238,6 @@ wtl() {
         echo "Error: Not in a git repository"
         return 1
     fi
-    
     git worktree list
 }
 
@@ -229,31 +245,31 @@ wtl() {
 # Usage: wtr <branch-name>
 wtr() {
     local branch_name="$1"
-    
+
     if [[ -z "$branch_name" ]]; then
         echo "Usage: wtr <branch-name>"
         echo "Example: wtr feature/old-thing"
         return 1
     fi
-    
+
     # Verify we're in a git repository
     if ! git rev-parse --git-dir > /dev/null 2>&1; then
         echo "Error: Not in a git repository"
         return 1
     fi
-    
+
     # Parse repository info
     local forge org repo_base
     if ! _wt_parse_repo_info; then
         return 1
     fi
-    
+
     # Sanitize branch name
     local sanitized_branch=$(_wt_sanitize_branch_name "$branch_name")
-    
+
     # Build expected worktree path
     local worktree_path="$DK_WORKTREES_PATH/${forge}/${org}/${repo_base}@${sanitized_branch}"
-    
+
     # Check if worktree exists
     if [[ ! -d "$worktree_path" ]]; then
         echo "Error: Worktree not found:"
@@ -263,18 +279,18 @@ wtr() {
         git worktree list
         return 1
     fi
-    
+
     # Remove worktree
     echo "Removing worktree: $worktree_path"
     git worktree remove "$worktree_path"
-    
+
     if [[ $? -ne 0 ]]; then
         echo "Error: Failed to remove worktree"
         return 1
     fi
-    
+
     echo "Worktree removed"
-    
+
     # Ask if user wants to delete the branch
     echo ""
     echo -n "Delete branch '$branch_name'? [y/N] "
