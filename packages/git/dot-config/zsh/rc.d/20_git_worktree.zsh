@@ -115,19 +115,20 @@ _wt_sanitize_branch_name() {
 
 _wt_branch_exists() {
   local branch_name="$1"
-  local branch_exists=0
+  local branch_exists=1
 
   if git show-ref --verify --quiet refs/heads/"$branch_name" 2>/dev/null; then
-    branch_exists=1
+    echo "Branch exists locally ..."
+    branch_exists=0
+  elif git show-ref --verify --quiet refs/remotes/origin/"$branch_name" 2>/dev/null; then
+    echo "Branch exists locally ..."
+    branch_exists=0
+  elif git ls-remote --exit-code --heads heads/"${branch_name}" 2>/dev/null; then
+      echo "Branch exists remotely ..."
+      branch_exists=0
   fi
 
-  if [  $branch_exists != 0 ]; then
-    if git ls-remote --exit-code --heads heads/"${branch_name}" 2>/dev/null; then
-      branch_exists=1
-    fi
-  fi
-
-  return branch_exists
+  return $branch_exists
 }
 
 # ============================================================================
