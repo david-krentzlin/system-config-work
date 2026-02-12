@@ -1,3 +1,15 @@
-if command -v dx /dev/null 2>&1; then
+if command -v dx >/dev/null 2>&1; then
   source <(dx completion zsh)
+
+  alias wt='dx git wt add'
+  alias wtl='dx git wt list'
+  alias wtr='dx git wt remove'
+  wtj() {
+    local target
+    target=$(dx git wt switch --plain "$@")
+    if [[ -n "$target" ]]; then
+      cd "$target" || return 1
+    fi
+  }
+  alias wtc='dx git clone'
 fi
