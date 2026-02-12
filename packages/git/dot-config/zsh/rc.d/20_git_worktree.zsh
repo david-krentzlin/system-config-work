@@ -312,7 +312,7 @@ wtr() {
 wtc() {
     local repo_url="$1"
     local target_dir="$2"
-    
+
     if [[ -z "$repo_url" ]]; then
         echo "Usage: wtc <repo-url> [target-dir]"
         echo ""
@@ -329,7 +329,7 @@ wtc() {
     # Parse repository information from URL
     local forge org repo_name
     local actual_clone_url="$repo_url"
-    
+
     # Handle different URL formats
     if [[ "$repo_url" =~ ^git@([^:]+):([^/]+)/(.+)\.git$ ]]; then
         # SSH format: git@github.com:user/repo.git
@@ -429,23 +429,23 @@ wtj() {
     local -a worktrees
     local -a worktree_paths
     local -a worktree_branches
-    
+
     # Parse git worktree list output
     # Format: /path/to/worktree  commit-hash [branch-name]
     while IFS= read -r line; do
         # Extract path (first field)
         local wt_path="${line%% *}"
-        
+
         # Skip bare repositories
         if [[ "$line" == *"(bare)"* ]]; then
             continue
         fi
-        
+
         # Skip current worktree
         if [[ "$wt_path" == "$current_path" ]]; then
             continue
         fi
-        
+
         # Extract branch name from brackets
         if [[ "$line" =~ \[([^\]]+)\] ]]; then
             local branch="${match[1]}"
@@ -458,17 +458,17 @@ wtj() {
     if [[ ${#worktree_paths[@]} -eq 0 ]]; then
         while IFS= read -r line; do
             local wt_path="${line%% *}"
-            
+
             # Skip bare repos
             if [[ "$line" == *"(bare)"* ]]; then
                 continue
             fi
-            
+
             # Skip current worktree
             if [[ "$wt_path" == "$current_path" ]]; then
                 continue
             fi
-            
+
             # Try to extract branch from the path (last component after @)
             if [[ "$wt_path" =~ @([^/]+)$ ]]; then
                 local branch="${match[1]}"
@@ -493,12 +493,12 @@ wtj() {
     # If branch name provided, try to find exact match first
     if [[ -n "$branch_name" ]]; then
         local sanitized_branch=$(_wt_sanitize_branch_name "$branch_name")
-        
+
         # Try to find matching branch
         for i in {1..${#worktree_branches[@]}}; do
             local wt_branch="${worktree_branches[$i]}"
             local wt_branch_sanitized=$(_wt_sanitize_branch_name "$wt_branch")
-            
+
             if [[ "$wt_branch" == "$branch_name" ]] || [[ "$wt_branch_sanitized" == "$sanitized_branch" ]]; then
                 worktree_path="${worktree_paths[$i]}"
                 selected_index=$i
@@ -560,8 +560,3 @@ wtj() {
     cd "$worktree_path"
 }
 
-# ============================================================================
-# ALIASES
-# ============================================================================
-
-# No aliases needed - functions have short names already

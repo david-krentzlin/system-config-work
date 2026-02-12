@@ -1,4 +1,5 @@
 [tools]
+golangci-lint = "latest"
 java = "21"
 lazygit = "latest"
 taplo = "latest"
